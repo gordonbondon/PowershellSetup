@@ -130,10 +130,10 @@ function prompt {
 	$host.UI.RawUi.WindowTitle = $userLocation
     	Write-Host($userLocation) -foregroundcolor Cyan
 
-	if ((whoami /all | select-string S-1-16-12288)) {
-        Write-Host('$') -nonewline -foregroundcolor White
-    } else {
+	if ((whoami /all | select-string S-1-16-12288) -ne $null) {
         Write-Host('#') -nonewline -foregroundcolor White
+    } else {
+        Write-Host('$') -nonewline -foregroundcolor White
     }
 	return " "
 }
