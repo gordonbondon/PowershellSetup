@@ -24,6 +24,12 @@ if ($host.Name -eq 'ConsoleHost') {
     }
 
 #=================================================
+#Import my module
+#=================================================
+Import-Module D:\Dropbox\Work\Scripts\Modules\Functions.psm1
+
+
+#=================================================
 #Install TabExpansion
 #=================================================
 if (!(Get-Module -ListAvailable | ? { $_.name -like 'TabExpansion++' })) {
@@ -60,62 +66,6 @@ Set-Alias gcmd Get-Command
 #==================================================
 #Functions
 #==================================================
-
-#Function to search throught history
-function hgrep {
-    param(
-        [Parameter(Mandatory=$false, Position=0)]
-        [string]$Regex,
-        [Parameter(Mandatory=$false)]
-        [switch]$Full
-    )
-    $commands = get-history |?{$_.commandline -match $regex}
-    if ($full) {
-        $commands |ft *
-    }
-    else {
-        foreach ($command in ($commands |select -ExpandProperty commandline)) {
-            # This ensures that only the first line is shown of a multiline command
-            # You can always get the full command using get-history or you can fork and remove this from the gist
-            if ($command -match '\r\n') {
-                ($command -split '\r\n')[0] + " ..."
-            }
-            else {
-                $command
-            }
-        }
-    }
-}
-
-function Search-ADUser {
-    param(
-        [String]$SearchString
-    )
-
-    $Match = Get-ADUser -Filter "samaccountname -like '*$($SearchString)*' -or name -like '*$($SearchString)*' -or givenname -like '*$($SearchString)*' -or surname -like '*$($SearchString)*' -or userprincipalname -like '*$($SearchString)*'"
-
-    if($Match -eq $null) {
-        # Nothing was found
-        Write-Host "No matching accounts were found."
-    } else {
-        $Match
-    }
-}
-
-function Search-ADComputer {
-    param(
-        [String]$SearchString
-    )
-
-    $Match = Get-ADComputer -Filter "samaccountname -like '*$($SearchString)*' -or name -like '*$($SearchString)*'"
-
-    if($Match -eq $null) {
-        # Nothing was found
-        Write-Host "No matching accounts were found."
-    } else {
-        $Match
-    }
-}
 
 #Edit prompt
 function prompt {
