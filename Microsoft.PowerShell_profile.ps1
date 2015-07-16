@@ -28,7 +28,6 @@ if ($host.Name -eq 'ConsoleHost') {
 #=================================================
 Import-Module D:\Dropbox\Work\Scripts\Modules\Functions.psm1
 
-
 #=================================================
 #Install TabExpansion
 #=================================================
