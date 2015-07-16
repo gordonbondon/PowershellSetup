@@ -128,12 +128,12 @@ function prompt {
 	# }
 	$userLocation = $env:username + '@' + [System.Environment]::MachineName + ' ' + $pwd
 	$host.UI.RawUi.WindowTitle = $userLocation
-    	Write-Host($userLocation) -foregroundcolor Cyan
+    	Write-Host($userLocation) -Foregroundcolor Cyan
 
 	if ((whoami /all | select-string S-1-16-12288) -ne $null) {
-        Write-Host('#') -nonewline -foregroundcolor White
+        Write-Host('#') -Nonewline -Foregroundcolor White
     } else {
-        Write-Host('$') -nonewline -foregroundcolor White
+        Write-Host('$') -Nonewline -Foregroundcolor White
     }
 	return " "
 }
