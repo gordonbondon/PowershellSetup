@@ -86,3 +86,8 @@ function prompt {
     }
 	return " "
 }
+
+#==================================================
+#Set Location
+#==================================================
+Set-Location D:\Dropbox\Work\Scripts
