@@ -45,6 +45,7 @@ if ($host.Name -eq 'ConsoleHost') {
 #Import-Module ActiveDirectory -ErrorAction SilentlyContinue
 #Import-Module Posh-SSH -ErrorAction SilentlyContinue
 #Import-Module PSCX -ErrorAction SilentlyContinue
+Import-Module Posh-Git
 
 #==================================================
 #Add snapins
@@ -67,7 +68,7 @@ Set-Alias gcmd Get-Command
 #==================================================
 
 #Edit prompt
-function prompt {
+function global:prompt {
 	# $path = ""
 	# $pathbits = ([string]$pwd).split("\", [System.StringSplitOptions]::RemoveEmptyEntries)
 	# if($pathbits.length -eq 1) {
@@ -75,14 +76,21 @@ function prompt {
 	# } else {
 	# 	$path = $pathbits[$pathbits.length - 1]
 	# }
-	$userLocation = $env:username + '@' + [System.Environment]::MachineName + ' ' + $pwd
-	$host.UI.RawUi.WindowTitle = $userLocation
-    	Write-Host($userLocation) -Foregroundcolor Cyan
+	$realLASTEXITCODE = $LASTEXITCODE
 
+    $userLocation = $env:username + '@' + [System.Environment]::MachineName + ' ' + $pwd.ProviderPath
+    Write-Host($userLocation) -Nonewline -Foregroundcolor Cyan
+
+    #Posh-Git integration
+    Write-VcsStatus
+
+    $global:LASTEXITCODE = $realLASTEXITCODE
+
+    #Check if elevated or not
 	if ((whoami /all | select-string S-1-16-12288) -ne $null) {
-        Write-Host('#') -Nonewline -Foregroundcolor White
+        Write-Host ("`n#") -Nonewline -Foregroundcolor White
     } else {
-        Write-Host('$') -Nonewline -Foregroundcolor White
+        Write-Host ("`n$") -Nonewline -Foregroundcolor White
     }
 	return " "
 }
