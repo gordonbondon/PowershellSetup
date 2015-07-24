@@ -29,14 +29,12 @@ if ($host.Name -eq 'ConsoleHost') {
 Import-Module D:\Dropbox\Work\Scripts\Modules\Functions.psm1
 
 #=================================================
-#Install TabExpansion
+#Import TabExpansion++
 #=================================================
 if (!(Get-Module -ListAvailable | ? { $_.name -like 'TabExpansion++' })) {
         Psget\Install-Module -ModuleUrl https://github.com/lzybkr/TabExpansionPlusPlus/zipball/master/ -ModuleName TabExpansion++ -Type ZIP
     }
-if ($host.Name -eq 'ConsoleHost') {
-    Import-Module TabExpansion++ -ErrorAction SilentlyContinue
-    }
+Import-Module TabExpansion++ -ErrorAction SilentlyContinue
 
 #==================================================
 #Import different modules
@@ -44,7 +42,29 @@ if ($host.Name -eq 'ConsoleHost') {
 #Import-Module ActiveDirectory -ErrorAction SilentlyContinue
 #Import-Module Posh-SSH -ErrorAction SilentlyContinue
 #Import-Module PSCX -ErrorAction SilentlyContinue
-Import-Module Posh-Git
+if (!(Get-Module -ListAvailable | ? { $_.name -like 'Posh-Git' })) {
+        Psget\Install-Module Posh-Git
+    }
+Import-Module Posh-Git -ErrorAction SilentlyContinue
+
+#==================================================
+#Import Jump.Locations https://github.com/tkellogg/Jump-Location
+# doese not work with Psreadline latest release
+#==================================================
+# if (!(Get-Module -ListAvailable | ? { $_.name -like 'Jump.Location' })) {
+#         Install-Module Jump.Location
+#     }
+# Import-Module Jump.Location -ErrorAction SilentlyContinue
+
+#==================================================
+#Import Zlocation https://github.com/vors/ZLocation
+# jumpstat -scan . to scan your folder with subfolders
+#==================================================
+if (!(Get-Module -ListAvailable | ? { $_.name -like 'ZLocation' })) {
+        Install-Module ZLocation
+    }
+Import-Module ZLocation -ErrorAction SilentlyContinue
+
 
 #==================================================
 #Add snapins
