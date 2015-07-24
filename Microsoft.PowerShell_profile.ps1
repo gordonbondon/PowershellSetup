@@ -32,12 +32,11 @@ Import-Module D:\Dropbox\Work\Scripts\Modules\Functions.psm1
 #Install TabExpansion
 #=================================================
 if (!(Get-Module -ListAvailable | ? { $_.name -like 'TabExpansion++' })) {
-        Install-Module -ModuleUrl https://github.com/lzybkr/TabExpansionPlusPlus/zipball/master/ -ModuleName TabExpansion++ -Type ZIP
+        Psget\Install-Module -ModuleUrl https://github.com/lzybkr/TabExpansionPlusPlus/zipball/master/ -ModuleName TabExpansion++ -Type ZIP
     }
 if ($host.Name -eq 'ConsoleHost') {
     Import-Module TabExpansion++ -ErrorAction SilentlyContinue
     }
-
 
 #==================================================
 #Import different modules
@@ -67,7 +66,7 @@ Set-Alias gcmd Get-Command
 #Functions
 #==================================================
 
-#Edit prompt
+#Edit prompt via Posh-Git and http://markembling.info/2009/09/my-ideal-powershell-prompt-with-git-integration
 function global:prompt {
 	# $path = ""
 	# $pathbits = ([string]$pwd).split("\", [System.StringSplitOptions]::RemoveEmptyEntries)
@@ -93,6 +92,25 @@ function global:prompt {
         Write-Host ("`n$") -Nonewline -Foregroundcolor White
     }
 	return " "
+}
+
+#Add "cd to previous directory" via http://windows-powershell-scripts.blogspot.com/2009/07/cd-change-to-previous-working-directory.html
+Remove-Item Alias:cd
+
+function cd {
+    if ($args[0] -eq '-') {
+        $pwd=$OLDPWD;
+    } else {
+        $pwd=$args[0];
+    }
+
+    $tmp=pwd;
+
+    if ($pwd) {
+        Set-Location $pwd;
+    }
+
+    Set-Variable -Name OLDPWD -Value $tmp -Scope global;
 }
 
 #==================================================
