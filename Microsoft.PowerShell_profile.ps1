@@ -137,3 +137,5 @@ function cd {
 #Set Location
 #==================================================
 Set-Location D:\Dropbox\Work\Scripts
+
+Start-SshAgent -Quiet
