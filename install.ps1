@@ -1,5 +1,5 @@
 $profiles = @( "Microsoft.PowerShell_profile.ps1", "Microsoft.PowerShellISE_profile.ps1" )
-#$profiles = @( "Microsoft.PowerShellISE_profile.ps1" )
+
 foreach ($name in $profiles)
 {
     $profilepath = (Split-Path $PROFILE -Parent) + '\' + $name
