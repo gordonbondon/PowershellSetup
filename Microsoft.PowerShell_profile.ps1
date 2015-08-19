@@ -10,6 +10,8 @@ if (!(Test-Path $HistoryDirPath -PathType Container)) { New-Item $HistoryDirPath
 Register-EngineEvent PowerShell.Exiting –Action { Get-History | Export-Clixml ($HistoryDirPath + $HistoryFileName) } | out-null
 if (Test-path ($HistoryDirPath + $HistoryFileName)) { Import-Clixml ($HistoryDirPath + $HistoryFileName) | Add-History }
 
+
+Import-Module PsGet
 #=================================================
 #Install and configure PSReadLine
 #=================================================
@@ -65,6 +67,7 @@ if (!(Get-Module -ListAvailable | ? { $_.name -like 'ZLocation' })) {
     }
 Import-Module ZLocation -ErrorAction SilentlyContinue
 
+Remove-Module PsGet
 
 #==================================================
 #Add snapins
