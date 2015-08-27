@@ -139,6 +139,17 @@ function cd {
     Set-Variable -Name OLDPWD -Value $tmp -Scope global;
 }
 
+function VerbCompletion
+{
+    [ArgumentCompleter(Parameter = 'Verb', Command = 'Get-Command')]
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+    Get-Verb "$wordToComplete*" |
+        ForEach-Object {
+            New-CompletionResult $_.Verb ("Group: " + $_.Group)
+        }
+}
+
 #==================================================
 #Set Location
 #==================================================
