@@ -7,7 +7,7 @@ $HistoryFileName = "history.clixml"
 
 if (!(Test-Path $HistoryDirPath -PathType Container)) { New-Item $HistoryDirPath -ItemType Directory }
 
-Register-EngineEvent PowerShell.Exiting –Action { Get-History | Export-Clixml ($HistoryDirPath + $HistoryFileName) } | out-null
+Register-EngineEvent PowerShell.Exiting -Action { Get-History | Export-Clixml ($HistoryDirPath + $HistoryFileName) } | out-null
 if (Test-path ($HistoryDirPath + $HistoryFileName)) { Import-Clixml ($HistoryDirPath + $HistoryFileName) | Add-History }
 
 
