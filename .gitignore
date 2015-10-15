@@ -3,6 +3,7 @@
 History
 *.zip
 *.msu
+*.swp
 
 # Windows image file caches
 Thumbs.db
