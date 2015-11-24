@@ -2,6 +2,8 @@
 #=================================================
 #Search history
 #=================================================
+$MaximumHistoryCount = 10000
+
 $HistoryDirPath = "D:\Dropbox\Work\Setup\Powershell\History\"
 $HistoryFileName = "history.clixml"
 
