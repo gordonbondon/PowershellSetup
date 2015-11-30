@@ -5,12 +5,22 @@
 $MaximumHistoryCount = 10000
 
 $HistoryDirPath = "D:\Dropbox\Work\Setup\Powershell\History\"
-$HistoryFileName = "history.clixml"
+# $HistoryFileName = "history.clixml"
+$HistoryFileName = "history.csv"
 
 if (!(Test-Path $HistoryDirPath -PathType Container)) { New-Item $HistoryDirPath -ItemType Directory }
 
-Register-EngineEvent PowerShell.Exiting -Action { Get-History | Export-Clixml ($HistoryDirPath + $HistoryFileName) } | out-null
-if (Test-path ($HistoryDirPath + $HistoryFileName)) { Import-Clixml ($HistoryDirPath + $HistoryFileName) | Add-History }
+# Register-EngineEvent PowerShell.Exiting -Action { Get-History | Export-Clixml ($HistoryDirPath + $HistoryFileName) } | out-null
+# if (Test-path ($HistoryDirPath + $HistoryFileName)) { 
+#     $history = Import-Clixml ($HistoryDirPath + $HistoryFileName)
+#     Add-History $history
+#     }
+    
+Register-EngineEvent PowerShell.Exiting -Action { Get-History | Export-CSV ($HistoryDirPath + $HistoryFileName) } | out-null
+if (Test-path ($HistoryDirPath + $HistoryFileName)) { 
+    $history = Import-CSV ($HistoryDirPath + $HistoryFileName)
+    Add-History $history
+    }    
 
 
 Import-Module PsGet
