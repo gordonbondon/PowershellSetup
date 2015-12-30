@@ -10,20 +10,13 @@ $HistoryFileName = "history.csv"
 
 if (!(Test-Path $HistoryDirPath -PathType Container)) { New-Item $HistoryDirPath -ItemType Directory }
 
-# Register-EngineEvent PowerShell.Exiting -Action { Get-History | Export-Clixml ($HistoryDirPath + $HistoryFileName) } | out-null
-# if (Test-path ($HistoryDirPath + $HistoryFileName)) { 
-#     $history = Import-Clixml ($HistoryDirPath + $HistoryFileName)
-#     Add-History $history
-#     }
-    
+
 Register-EngineEvent PowerShell.Exiting -Action { Get-History | Export-CSV ($HistoryDirPath + $HistoryFileName) } | out-null
-if (Test-path ($HistoryDirPath + $HistoryFileName)) { 
+if (Test-path ($HistoryDirPath + $HistoryFileName)) {
     $history = Import-CSV ($HistoryDirPath + $HistoryFileName)
     Add-History $history
-    }    
+    }
 
-
-Import-Module PsGet
 #=================================================
 #Install and configure PSReadLine
 #=================================================
@@ -38,28 +31,15 @@ if ($host.Name -eq 'ConsoleHost') {
     }
 
 #=================================================
-#Import my module
+#Import my modules
 #=================================================
-Import-Module Functions
-
-#=================================================
-#Import TabExpansion++
-#=================================================
-if (!(Get-Module -ListAvailable | ? { $_.name -like 'TabExpansion++' })) {
-        Psget\Install-Module -ModuleUrl https://github.com/lzybkr/TabExpansionPlusPlus/zipball/master/ -ModuleName TabExpansion++ -Type ZIP
-    }
-Import-Module TabExpansion++ -ErrorAction SilentlyContinue
+Import-Module Functions -SilentlyContinue
 
 #==================================================
 #Import different modules
 #==================================================
-#Import-Module ActiveDirectory -ErrorAction SilentlyContinue
-#Import-Module Posh-SSH -ErrorAction SilentlyContinue
-#Import-Module PSCX -ErrorAction SilentlyContinue
-if (!(Get-Module -ListAvailable | ? { $_.name -like 'Posh-Git' })) {
-        Psget\Install-Module Posh-Git
-    }
 Import-Module Posh-Git -ErrorAction SilentlyContinue
+Import-Module TabExpansionPlusPlus -ErrorAction SilentlyContinue
 
 #==================================================
 #Import Jump.Locations https://github.com/tkellogg/Jump-Location
@@ -74,12 +54,7 @@ Import-Module Posh-Git -ErrorAction SilentlyContinue
 #Import Zlocation https://github.com/vors/ZLocation
 # jumpstat -scan . to scan your folder with subfolders
 #==================================================
-if (!(Get-Module -ListAvailable | ? { $_.name -like 'ZLocation' })) {
-        Install-Module ZLocation
-    }
 Import-Module ZLocation -ErrorAction SilentlyContinue
-
-Remove-Module PsGet
 
 #==================================================
 #Add snapins
