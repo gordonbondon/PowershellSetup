@@ -2,20 +2,18 @@
 #=================================================
 #Search history
 #=================================================
-$MaximumHistoryCount = 10000
+$MaximumHistoryCount = 32767
 
-$HistoryDirPath = "D:\Dropbox\Work\Setup\Powershell\History\"
+# $HistoryDirPath = "${env:USERPROFILE}\.powershell\"
 # $HistoryFileName = "history.clixml"
-$HistoryFileName = "history.csv"
 
-if (!(Test-Path $HistoryDirPath -PathType Container)) { New-Item $HistoryDirPath -ItemType Directory }
+# if (!(Test-Path $HistoryDirPath -PathType Container)) { New-Item $HistoryDirPath -ItemType Directory }
 
-
-Register-EngineEvent PowerShell.Exiting -Action { Get-History | Export-CSV ($HistoryDirPath + $HistoryFileName) } | out-null
-if (Test-path ($HistoryDirPath + $HistoryFileName)) {
-    $history = Import-CSV ($HistoryDirPath + $HistoryFileName)
-    Add-History $history
-    }
+# Register-EngineEvent PowerShell.Exiting -Action { Get-History -Count $MaximumHistoryCount | Export-Clixml ($HistoryDirPath + $HistoryFileName) } | out-null
+# if (Test-path ($HistoryDirPath + $HistoryFileName)) {
+#     $history = Import-Clixml ($HistoryDirPath + $HistoryFileName)
+#     Add-History $history
+#     }
 
 #=================================================
 #Install and configure PSReadLine
@@ -26,6 +24,8 @@ if (!(Get-Module -ListAvailable | ? { $_.name -like 'psreadline' })) {
 if ($host.Name -eq 'ConsoleHost') {
     Import-Module PSReadline -ErrorAction SilentlyContinue
 
+    Set-PSReadlineOption -HistorySavePath "${env:USERPROFILE}\.powershell\history.txt"
+
     Set-PSReadlineKeyHandler -Key UpArrow   -Function HistorySearchBackward
     Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
     }
@@ -33,22 +33,13 @@ if ($host.Name -eq 'ConsoleHost') {
 #=================================================
 #Import my modules
 #=================================================
-Import-Module Functions -SilentlyContinue
+Import-Module Functions -ErrorAction SilentlyContinue
 
 #==================================================
 #Import different modules
 #==================================================
 Import-Module Posh-Git -ErrorAction SilentlyContinue
 Import-Module TabExpansionPlusPlus -ErrorAction SilentlyContinue
-
-#==================================================
-#Import Jump.Locations https://github.com/tkellogg/Jump-Location
-# doese not work with Psreadline latest release
-#==================================================
-# if (!(Get-Module -ListAvailable | ? { $_.name -like 'Jump.Location' })) {
-#         Install-Module Jump.Location
-#     }
-# Import-Module Jump.Location -ErrorAction SilentlyContinue
 
 #==================================================
 #Import Zlocation https://github.com/vors/ZLocation
@@ -68,8 +59,10 @@ Set-Alias npp -value "C:\Program Files (x86)\Notepad++\notepad++.exe" -option re
 Set-Alias subl "C:\Program Files\Sublime Text 3\sublime_text.exe" -option readonly
 Set-Alias winscp "C:\Program Files (x86)\WinSCP\WinSCP.exe" -option readonly
 Set-Alias ssh "D:\Tools\plink.exe" -option readonly
+Set-Alias mc "C:\Program Files (x86)\Midnight Commander\mc.exe" -option readonly
 Set-Alias ghlp Get-Help
 Set-Alias gcmd Get-Command
+Set-Alias is Start-ISEPreview
 
 
 #==================================================
