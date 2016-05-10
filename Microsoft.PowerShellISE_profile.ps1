@@ -1,9 +1,3 @@
-#=================================================
-#Install and configure ISEGit
-#=================================================
-if (!(Get-Module -ListAvailable | ? { $_.name -like 'ISEGit' })) {
-        Powershellget\Install-Module ISEGit
-    }
-Import-Module ISEGit
-
-Set-Location D:\Dropbox\Work\Scripts
+#Source common settings
+$dir = Split-Path $MyInvocation.MyCommand.Definition
+. "$dir\Microsoft.PowerShell_profile.Common.ps1"
