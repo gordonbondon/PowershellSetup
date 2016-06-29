@@ -91,3 +91,9 @@ function cd {
 #Set Location
 #==================================================
 Set-Location D:\Dropbox\Work\Scripts
+
+#==================================================
+#Manage SSH agent
+#==================================================
+Start-SshAgent -Quiet
+Register-EngineEvent PowerShell.Exiting -Action { Stop-SshAgent } -SupportEvent
