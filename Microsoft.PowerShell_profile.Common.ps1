@@ -31,6 +31,7 @@ Set-Alias is Start-ISEPreview
 Set-Alias gac Get-ADComputer
 Set-Alias gau Get-ADUser
 Set-Alias gag Get-ADGroup
+Set-Alias test Invoke-Pester
 
 
 #==================================================
