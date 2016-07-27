@@ -95,7 +95,10 @@ function cd {
 #==================================================
 #Set Location
 #==================================================
-Set-Location D:\Dropbox\Work\Scripts
+switch ($env:COMPUTERNAME) {
+    'AIARMOLIUK' { Set-Location D:\Dropbox\Work\Scripts }
+    'ARTEM-PROBOOK' { Set-Location C:\Users\koolg\dev\ }
+}
 
 #==================================================
 #Manage SSH agent
