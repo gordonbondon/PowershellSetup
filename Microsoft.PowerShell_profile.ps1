@@ -5,11 +5,8 @@
 $MaximumHistoryCount = 32767
 
 #=================================================
-#Install and configure PSReadLine
+#Configure PSReadLine
 #=================================================
-if (!(Get-Module -ListAvailable | ? { $_.name -like 'psreadline' })) {
-        Install-Module PsReadLine
-    }
 if ($host.Name -eq 'ConsoleHost') {
     Import-Module PSReadline -ErrorAction SilentlyContinue
 
