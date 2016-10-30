@@ -57,6 +57,14 @@ function global:prompt {
     $userLocation = $env:username + '@' + [System.Environment]::MachineName
     $userPath = $PWD.ProviderPath
 
+    if($userPath.Length -gt 40) {
+        $userPath = $userPath -split '\\'
+        $userPath = "$($userPath[0])\..\$($userPath[-3..-1] -join '\')"
+    }
+    else{
+        $userPath = $PWD.Path
+    }
+
     Write-Host "`n"
     Write-Host $userLocation -Nonewline -Foregroundcolor Cyan -BackgroundColor Black
     Write-Host " $userPath" -NoNewline -ForegroundColor DarkBlue
