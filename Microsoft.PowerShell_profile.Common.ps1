@@ -1,7 +1,7 @@
 #=================================================
 #Import my modules
 #=================================================
-Import-Module Functions -ErrorAction SilentlyContinue
+Import-Module PSFunctions -ErrorAction SilentlyContinue
 
 #==================================================
 #Import different modules
@@ -9,6 +9,7 @@ Import-Module Functions -ErrorAction SilentlyContinue
 Import-Module Posh-Git -ErrorAction SilentlyContinue
 Import-Module TabExpansionPlusPlus -ErrorAction SilentlyContinue
 Import-Module ZLocation -ErrorAction SilentlyContinue
+Import-Module PoShFuck -ErrorAction SilentlyContinue
 
 #==================================================
 #Set aliases
@@ -25,6 +26,7 @@ Set-Alias npp -value "C:\Program Files (x86)\Notepad++\notepad++.exe" -option re
 Set-Alias subl "C:\Program Files\Sublime Text 3\sublime_text.exe" -option readonly
 Set-Alias winscp "C:\Program Files (x86)\WinSCP\WinSCP.exe" -option readonly
 Set-Alias mc "C:\Program Files (x86)\Midnight Commander\mc.exe" -option readonly
+Set-Alias charm "C:\Program Files (x86)\JetBrains\PyCharm Community Edition 2016.2.3\bin\pycharm64.exe" -Option ReadOnly
 Set-Alias ghlp Get-Help
 Set-Alias gcmd Get-Command
 Set-Alias is Start-ISEPreview
@@ -95,13 +97,12 @@ function cd {
 #==================================================
 #Set Location
 #==================================================
-switch ($env:COMPUTERNAME) {
-    'AIARMOLIUK' { Set-Location D:\Dropbox\Work\Scripts }
-    'ARTEM-PROBOOK' { Set-Location C:\Users\koolg\dev\ }
-}
+$dropBoxFolder = (Get-Content "${env:LOCALAPPDATA}\Dropbox\info.json" | ConvertFrom-Json).personal.path
+
+Set-Location -Path "$dropBoxFolder\Dev"
 
 #==================================================
 #Manage SSH agent
 #==================================================
-Start-SshAgent -Quiet
-Register-EngineEvent PowerShell.Exiting -Action { Stop-SshAgent } -SupportEvent
+#Start-SshAgent -Quiet
+#Register-EngineEvent PowerShell.Exiting -Action { Stop-SshAgent } -SupportEvent
