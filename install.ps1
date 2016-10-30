@@ -17,7 +17,7 @@ foreach ($name in $profiles)
 
 #Add my module folder to module path via http://tomtalks.uk/2013/06/powershell-add-a-persistent-module-path-to-envpsmodulepath/
 $originalpaths = (Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PSModulePath).PSModulePath
-$newPath = $originalpaths + ';' + (Get-Item ..\..\Scripts\Modules\).FullName
+$newPath = $originalpaths + ';' + (Get-Item ..\PSModules\).FullName
 Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PSModulePath -Value $newPath
 
 #Set Get-Credential password promt co console mode
