@@ -22,7 +22,7 @@ foreach ($nxCommand in @('cat','cp','curl','diff','echo','kill','ls','man','moun
     }
 }
 
-Set-Alias npp -value "C:\Program Files (x86)\Notepad++\notepad++.exe" -option readonly
+Set-Alias npp -value "C:\Program Files\Notepad++\notepad++.exe" -option readonly
 Set-Alias subl "C:\Program Files\Sublime Text 3\sublime_text.exe" -option readonly
 Set-Alias winscp "C:\Program Files (x86)\WinSCP\WinSCP.exe" -option readonly
 Set-Alias mc "C:\Program Files (x86)\Midnight Commander\mc.exe" -option readonly
@@ -56,10 +56,11 @@ function global:prompt {
 
     $userLocation = $env:username + '@' + [System.Environment]::MachineName
     $userPath = $PWD.ProviderPath
-
-    if($userPath.Length -gt 40) {
-        $userPath = $userPath -split '\\'
-        $userPath = "$($userPath[0])\..\$($userPath[-3..-1] -join '\')"
+    $userDisk = Split-Path $userPath -Qualifier
+    $userFolder = Split-Path $userPath -NoQualifier
+    $width = $host.UI.RawUI.WindowSize.Width
+    if($userFolder.Length -ge ($width*0.4 + 2)) {
+        $userPath = "$userDisk\..$($userFolder.Substring($userFolder.Length - $width*0.4))"
     }
     else{
         $userPath = $PWD.Path
