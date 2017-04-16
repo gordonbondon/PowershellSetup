@@ -6,10 +6,15 @@ Import-Module PSFunctions -ErrorAction SilentlyContinue
 #==================================================
 #Import different modules
 #==================================================
-Import-Module Posh-Git -ErrorAction SilentlyContinue
 Import-Module TabExpansionPlusPlus -ErrorAction SilentlyContinue
 Import-Module ZLocation -ErrorAction SilentlyContinue
 Import-Module PoShFuck -ErrorAction SilentlyContinue
+Import-Module DefaultParameter
+
+#==================================================
+# Set command defaults
+#==================================================
+Set-DefaultParameter -Command Get-DHCPLeaseByName -Parameter Credential {get-Credential}
 
 #==================================================
 #Set aliases
@@ -35,24 +40,13 @@ Set-Alias gau Get-ADUser
 Set-Alias gag Get-ADGroup
 Set-Alias test Invoke-Pester
 
-
 #==================================================
-#Functions
+# Prompt
 #==================================================
 
 #Edit prompt via Posh-Git and http://markembling.info/2009/09/my-ideal-powershell-prompt-with-git-integration
 function global:prompt {
-	# $path = ""
-	# $pathbits = ([string]$pwd).split("\", [System.StringSplitOptions]::RemoveEmptyEntries)
-	# if($pathbits.length -eq 1) {
-	# 	$path = $pathbits[0] + "\"
-	# } else {
-	# 	$path = $pathbits[$pathbits.length - 1]
-	# }
-	$realLASTEXITCODE = $LASTEXITCODE
-
-    # Reset color, which can be messed up by Enable-GitColors
-    $Host.UI.RawUI.ForegroundColor = $GitPromptSettings.DefaultForegroundColor
+    $origLastExitCode = $LASTEXITCODE
 
     $userLocation = $env:username + '@' + [System.Environment]::MachineName
     $userPath = $PWD.ProviderPath
@@ -80,16 +74,32 @@ function global:prompt {
 
     #Posh-Git integration
     Write-VcsStatus
-
-    $global:LASTEXITCODE = $realLASTEXITCODE
+    $LASTEXITCODE = $origLastExitCode
 
     #Check if elevated or not
-	if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+    if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
         Write-Host ("`n#") -Nonewline -Foregroundcolor White
     } else {
         Write-Host ("`n$") -Nonewline -Foregroundcolor White
     }
-	return " "
+    return " "
+}
+Import-Module Posh-Git -ErrorAction SilentlyContinue
+
+#==================================================
+# Functions
+#==================================================
+
+# This function cannot be in a module (else it will import the module to a nested scope) 
+# from https://github.com/Jaykul/Profile/blob/master/profile.ps1
+function Reset-Module {
+    <#
+    .Synopsis
+        Remove and re-import a module to force a full reload
+    #>
+    param($ModuleName)
+    Microsoft.PowerShell.Core\Remove-Module $ModuleName
+    Microsoft.PowerShell.Core\Import-Module $ModuleName -force -pass | Format-Table Name, Version, Path -Auto
 }
 
 #Add "cd to previous directory" via http://windows-powershell-scripts.blogspot.com/2009/07/cd-change-to-previous-working-directory.html
@@ -121,5 +131,4 @@ Set-Location -Path "$dropBoxFolder\Dev"
 #==================================================
 #Manage SSH agent
 #==================================================
-#Start-SshAgent -Quiet
-#Register-EngineEvent PowerShell.Exiting -Action { Stop-SshAgent } -SupportEvent
+Start-SshAgent -Quiet
